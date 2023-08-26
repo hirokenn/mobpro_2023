@@ -2,8 +2,8 @@ library(pacman)
 p_load(tidyverse)
 
 # set directory
-dir_clean_data <- "./clean"
-dir_output <- "./output"
+dir_clean_data <- "./data/clean"
+dir_output <- "./data/output"
 
 # read data
 df_short_clean <- read_csv(paste0(dir_clean_data, "/df_short.csv"))
