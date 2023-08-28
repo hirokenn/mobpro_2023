@@ -46,7 +46,8 @@ df_concatenated <- df_student_characteristics %>%
 deficiency_pattern <- c("unknown", NA, NaN, Inf, "999", "*", "###")
 
 df_cleaned <- df_concatenated %>% 
-  mutate(across(c(gender, percentile, quartile), ~if_else(. %in% deficiency_pattern, NA, as.numeric(.))))
+  mutate(across(c(gender, percentile, quartile), ~if_else(. %in% deficiency_pattern, NA, .))) %>% 
+  mutate(percentile = as.numeric(percentile))
 
 # make dummy variables
 df_numeric <- df_cleaned %>% 

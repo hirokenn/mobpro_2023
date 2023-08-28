@@ -55,7 +55,6 @@ df_outcomes <- df_short_clean %>%
                              as.character(percentile))) %>% 
   mutate(quartile = if_else(is.na(quartile),
                             "###",
-                            # sample(c(NA, NaN, -Inf, "999", "*"), nrow(.), replace = TRUE), 
                             as.character(quartile))) %>% 
   select(生徒ID = pupilid,
          四分位 = quartile,
