@@ -51,7 +51,7 @@ df_cleaned <- df_concatenated %>%
 
 # make dummy variables
 df_numeric <- df_cleaned %>% 
-  mutate(girl = if_else(gender == "女子", 1, 0),
+  mutate(is_girl = if_else(gender == "女子", 1, 0),
          in_bungoma = if_else(district == "BUNGOMA", 1, 0),
          bottomhalf = if_else(quartile <= 1, 1, 0),
          bottomquarter = if_else(quartile == 0, 1, 0),
@@ -61,7 +61,7 @@ df_numeric <- df_cleaned %>%
 
 # scale score
 df <- df_numeric %>% 
-  mutate(std_score = scale(score)[,1])
+  mutate(std_score = drop(scale(score)))
 
 # output cleaned data-----------------------------------------------------------
 saveRDS(df, paste0(dir_cleaned_data, "/df.rds"))

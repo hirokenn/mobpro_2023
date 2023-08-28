@@ -25,12 +25,23 @@ write.csv(df_treatment_status,
 
 # student_characteristics
 df_student_characteristics <- df_short_clean %>% 
-  select(pupilid, schoolid, etpteacher, agetest, girl) %>% 
+  select(pupilid, schoolid, etpteacher, agetest, girl, bottomhalf, bottomquarter, secondquarter, thirdquarter, topquarter, percentile) %>% 
   mutate(gender = case_when(girl == 0 ~ "男子",
                             girl == 1 ~ "女子",
                             TRUE ~ "unknown")) %>% 
   mutate(id = as.character(pupilid)) %>% 
   mutate(id = if_else(row_number() %in% random_row_number, paste0(id, "番"), id)) %>% 
+  mutate(quartile = case_when(is.na(percentile) ~ NA,
+                              bottomquarter == 1 ~ 0,
+                              secondquarter == 1 ~ 1,
+                              thirdquarter == 1 ~ 2,
+                              TRUE ~ 3)) %>% 
+  mutate(percentile = if_else(is.na(percentile),
+                              sample(c(NA, "999", "*"), nrow(.), replace = TRUE),
+                              as.character(percentile))) %>% 
+  mutate(quartile = if_else(is.na(quartile),
+                            "###",
+                            as.character(quartile))) %>% 
   select(生徒ID = id,
          小学校NUMBER = schoolid,
          非常勤講師 = etpteacher,
@@ -44,18 +55,7 @@ write.csv(df_student_characteristics,
   
 # outcomes
 df_outcomes <- df_short_clean %>% 
-  select(pupilid, bottomhalf, bottomquarter, secondquarter, thirdquarter, topquarter, percentile, totalscore) %>% 
-  mutate(quartile = case_when(is.na(percentile) ~ NA,
-                              bottomquarter == 1 ~ 0,
-                              secondquarter == 1 ~ 1,
-                              thirdquarter == 1 ~ 2,
-                              TRUE ~ 3)) %>% 
-  mutate(percentile = if_else(is.na(percentile),
-                             sample(c(NA, Inf, "999", "*"), nrow(.), replace = TRUE),
-                             as.character(percentile))) %>% 
-  mutate(quartile = if_else(is.na(quartile),
-                            "###",
-                            as.character(quartile))) %>% 
+  select(pupilid, totalscore) %>% 
   select(生徒ID = pupilid,
          四分位 = quartile,
          パーセンタイル = percentile,
