@@ -2,7 +2,7 @@ library(pacman)
 p_load(tidyverse)
 
 dir_distributed_data <- "./data/distributed"
-dir_cleaned_data <- "./data/tmp"
+dir_cleaned_data <- "./data/cleaned"
 
 # read distributed data---------------------------------------------------------
 # student characteristics

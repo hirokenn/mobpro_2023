@@ -32,10 +32,10 @@ df_student_characteristics <- df_short_clean %>%
   mutate(id = as.character(pupilid)) %>% 
   mutate(id = if_else(row_number() %in% random_row_number, paste0(id, "番"), id)) %>% 
   mutate(quartile = case_when(is.na(percentile) ~ NA,
-                              bottomquarter == 1 ~ 0,
-                              secondquarter == 1 ~ 1,
-                              thirdquarter == 1 ~ 2,
-                              TRUE ~ 3)) %>% 
+                              bottomquarter == 1 ~ "下位25%",
+                              secondquarter == 1 ~ "下位50%",
+                              thirdquarter == 1 ~ "上位50%",
+                              TRUE ~ "上位25%")) %>% 
   mutate(percentile = if_else(is.na(percentile),
                               sample(c(NA, "999", "*"), nrow(.), replace = TRUE),
                               as.character(percentile))) %>% 
@@ -46,7 +46,9 @@ df_student_characteristics <- df_short_clean %>%
          小学校NUMBER = schoolid,
          非常勤講師 = etpteacher,
          年齢 = agetest,
-         性別 = gender)
+         性別 = gender,
+         四分位 = quartile,
+         パーセンタイル = percentile)
 
 write.csv(df_student_characteristics,
           file = paste0(dir_output, "/student_characteristics.csv"),
@@ -57,8 +59,6 @@ write.csv(df_student_characteristics,
 df_outcomes <- df_short_clean %>% 
   select(pupilid, totalscore) %>% 
   select(生徒ID = pupilid,
-         四分位 = quartile,
-         パーセンタイル = percentile,
          学力スコア = totalscore)
   
 write.csv(df_outcomes,
