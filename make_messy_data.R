@@ -11,15 +11,17 @@ df_short_clean <- read_csv(paste0(dir_clean_data, "/df_short2.csv"))
 set.seed(0)
 random_row_number <- sample(nrow(df_short_clean), nrow(df_short_clean) * 0.1)
 
-# treatment status
-df_treatment_status <- df_short_clean %>% 
+
+# school characteristics --------------------------------------------------
+
+df_school_characteristics <- df_short_clean %>% 
   distinct(schoolid, tracking, district) %>% 
   rename(小学校NUMBER = schoolid,
          能力別学級 = tracking,
          立地 = district)
 
-write.csv(df_treatment_status,
-          file = paste0(dir_output, "/treatment_status.csv"),
+write.csv(df_school_characteristics,
+          file = paste0(dir_output, "/school_characteristics.csv"),
           row.names = FALSE, 
           fileEncoding = "UTF-8")
 
