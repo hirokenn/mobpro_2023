@@ -67,7 +67,9 @@ write.csv(df_student_characteristics,
           row.names = FALSE, 
           fileEncoding = "cp932")
   
-# outcomes
+
+# outcomes ----------------------------------------------------------------
+
 df_outcomes <- df_short_clean %>% 
   select(pupilid, totalscore) %>% 
   select(生徒ID = pupilid,
