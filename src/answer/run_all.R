@@ -1,5 +1,5 @@
 # set up -----------------------------------------------------------------------
-p_load::p_load(tidyverse, modelsummary)
+p_load::p_load(tidyverse, modelsummary, kableExtra)
 
 dir_distributed_data <- "./data/distributed"
 dir_cleaned_data <- "./data/clean"
