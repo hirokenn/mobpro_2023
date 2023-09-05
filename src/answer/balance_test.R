@@ -40,6 +40,6 @@ t_test <- c("girls_ratio", "age_mean", "is_bungoma") %>%
 
 # format result ----------------------------------------------------------------
 t_test_table <- t_test %>% 
-  kable() %>% 
+  kable(digits = 3) %>% 
   kable_styling(fixed_thead = T) %>% 
   save_kable(paste0(dir_figure, "/t_test.png"))

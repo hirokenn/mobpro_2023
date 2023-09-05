@@ -13,7 +13,6 @@ random_row_number <- sample(nrow(df_short_clean), nrow(df_short_clean) * 0.1)
 
 
 # school characteristics --------------------------------------------------
-
 df_school_characteristics <- df_short_clean %>% 
   distinct(schoolid, tracking, district) %>% 
   rename(小学校NUMBER = schoolid,
