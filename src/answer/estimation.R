@@ -32,7 +32,7 @@ coef_map <- c("tracking" = "処置効果",
 gof_map <- tribble(
   ~raw,        ~clean,   ~fmt,
   "nobs",      "観測数", 0,
-  "r.squared", "決定数", 2
+  "r.squared", "決定数", 3
 )
 
 control_status <- tribble(
