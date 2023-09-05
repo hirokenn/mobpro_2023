@@ -1,4 +1,7 @@
-df_summary <- readRDS(paste0(dir_cleand_data, "/df.rds")) %>% 
+df <- readRDS(paste0(dir_cleand_data, "/df.rds"))
+
+# select variables -------------------------------------------------------------
+df_summary <- df %>% 
   select("学力スコア" = score,
          "学力スコア(標準化)" = std_score,
          "能力別学級ダミー" = tracking,
@@ -17,10 +20,9 @@ df_summary <- readRDS(paste0(dir_cleand_data, "/df.rds")) %>%
          ) %>% 
   as.data.frame()
   
+# make summary table -----------------------------------------------------------
 summary <- datasummary(All(df_summary) ~ (N + Mean + SD), 
                        data = df_summary,
                        na.rm = TRUE,
                        fmt = 3,
-                       output = "gt")
-
-gtsave(summary, filename = paste0(dir_figure, "/summary.png"))
+                       output = paste0(dir_figure, "/summary.png"))

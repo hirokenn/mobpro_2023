@@ -25,7 +25,7 @@ results <- list(
   "交差項あり" = lm_robust(formula = as.formula(with_cross_term_model), data = df)
 )
 
-# regression table -------------------------------------------------------------
+# make regression table --------------------------------------------------------
 coef_map <- c("tracking" = "処置効果", 
               "tracking:bottom_half" = "事前の成績位置(下位50%) × 能力別学級")
 
@@ -45,5 +45,6 @@ result_summary <- modelsummary(results,
                                stars = TRUE,
                                add_rows = control_status,
                                coef_map = coef_map,
-                               gof_map = gof_map)
-result_summary
+                               gof_map = gof_map,
+                               output = paste0(dir_figure, "/regression_result.png"))
+
