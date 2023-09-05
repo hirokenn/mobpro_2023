@@ -1,4 +1,4 @@
-df <- readRDS(paste0(dir_cleand_data, "/df.rds")) 
+df <- readRDS(paste0(dir_cleaned_data, "/df.rds")) 
 
 # define models ----------------------------------------------------------------
 base_model <- "std_score ~ tracking"

@@ -1,5 +1,5 @@
-df <- readRDS(paste0(dir_cleand_data, "/df.rds"))
-df_school <- readRDS(paste0(dir_clean_data, "/df_school.rds"))
+df <- readRDS(paste0(dir_cleaned_data, "/df.rds"))
+df_school <- readRDS(paste0(dir_cleaned_data, "/df_school.rds"))
 
 # aggregate data ---------------------------------------------------------------
 df_aggregated <- df %>% 

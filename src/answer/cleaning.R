@@ -62,5 +62,5 @@ df <- df_numeric %>%
   mutate(std_score = drop(scale(score)))
 
 # output cleaned data ----------------------------------------------------------
-saveRDS(df_treatment_status, paste0(dir_clean_data, "/df_school.rds"))
+saveRDS(df_treatment_status, paste0(dir_cleaned_data, "/df_school.rds"))
 saveRDS(df, paste0(dir_cleaned_data, "/df.rds"))
