@@ -1,11 +1,26 @@
-library(pacman)
-p_load(tidyverse, modelsummary)
-
-dir_cleand_data <- "./data/tmp"
-
 df_summary <- readRDS(paste0(dir_cleand_data, "/df.rds")) %>% 
-  mutate(is_treatment = if_else(tracking == 1, "treatment", "control"))
+  select("学力スコア" = score,
+         "学力スコア(標準化)" = std_score,
+         "能力別学級ダミー" = tracking,
+         "性別(女子)" = is_girl,
+         "年齢" = age,
+         "非常勤講師ダミー" = etp_teacher,
+         "学校所在地(BUNGOMA)" = in_bungoma,
+         "学校所在地(BUTERE/M)" = in_butere,
+         "成績位置(上位50%)" = top_half,
+         "成績位置(下位50%)" = bottom_half,
+         "成績位置(上位25%)" = top_quarter,
+         "成績位置(上位25-50%)" = second_quarter,
+         "成績位置(下位25-50%)" = third_quarter,
+         "成績位置(下位25%)" = bottom_quarter,
+         "成績位置(パーセンタイル)" = percentile
+         ) %>% 
+  as.data.frame()
+  
+summary <- datasummary(All(df_summary) ~ (N + Mean + SD), 
+                       data = df_summary,
+                       na.rm = TRUE,
+                       fmt = 3,
+                       output = "gt")
 
-summary <- datasummary(std_score + score + etpteacher + age + is_girl + percentile + bottomhalf + bottomquarter + secondquarter + thirdquarter + tracking ~ (N + Mean + SD),
-                       data = df_summary, na.rm = TRUE)
-summary
+gtsave(summary, filename = paste0(dir_figure, "/summary.png"))

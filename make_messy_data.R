@@ -40,10 +40,10 @@ df_student_characteristics <- df_short_clean %>%
                           bottomhalf == 1 ~ "下位50%",
                           bottomhalf == 0 ~ "上位50%")) %>% 
   mutate(quarter = case_when(is.na(percentile) ~ NA,
-                              bottomquarter == 1 ~ "下位25%",
-                              secondquarter == 1 ~ "下位25-50%",
-                              thirdquarter == 1 ~ "上位25-50%",
-                              TRUE ~ "上位25%")) %>% 
+                             bottomquarter == 1 ~ "下位25%",
+                             secondquarter == 1 ~ "下位25-50%",
+                             thirdquarter == 1 ~ "上位25-50%",
+                             TRUE ~ "上位25%")) %>% 
   mutate(percentile = if_else(is.na(percentile),
                               sample(c(NA, "999", "*"), nrow(.), replace = TRUE),
                               as.character(percentile))) %>% 
