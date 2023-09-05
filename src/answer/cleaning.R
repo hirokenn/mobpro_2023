@@ -13,7 +13,7 @@ df_student_characteristics <- read_csv(file = paste0(dir_distributed_data, "/stu
          percentile = "成績位置(パーセンタイル)")
 
 # treatment status
-df_treatment_status <- read_csv(file = paste0(dir_distributed_data, "/treatment_status.csv"),
+df_treatment_status <- read_csv(file = paste0(dir_distributed_data, "/school_characteristics.csv"),
                                  skip = 0,
                                  locale = locale(encoding = "UTF-8")) %>% 
   rename(sch_id = 小学校NUMBER,
