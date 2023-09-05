@@ -20,9 +20,9 @@ with_cross_term_model <- paste(with_covariates_model,
 
 # regression analysis ----------------------------------------------------------
 results <- list(
-  "共変量なし" = lm_robust(formula = as.formula(base_model), data = df),
-  "共変量あり" = lm_robust(formula = as.formula(with_covariates_model), data = df),
-  "交差項あり" = lm_robust(formula = as.formula(with_cross_term_model), data = df)
+  "共変量なし" = lm_robust(formula = as.formula(base_model), data = df, clusters = sch_id),
+  "共変量あり" = lm_robust(formula = as.formula(with_covariates_model), data = df, clusters = sch_id),
+  "交差項あり" = lm_robust(formula = as.formula(with_cross_term_model), data = df, clusters = sch_id)
 )
 
 # make regression table --------------------------------------------------------
