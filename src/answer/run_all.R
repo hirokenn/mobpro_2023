@@ -1,7 +1,6 @@
 # set up -----------------------------------------------------------------------
-pacman::p_load(tidyverse, modelsummary, kableExtra)
+pacman::p_load(tidyverse, modelsummary, kableExtra, estimatr)
 
-dir_distributed_data <- "./data/distributed"
 dir_cleaned_data <- "./data/clean"
 dir_source <- "./src/answer"
 dir_figure <- "./fig"

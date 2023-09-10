@@ -18,11 +18,13 @@ df_summary <- df %>%
          "成績位置(下位25%)" = bottom_quarter,
          "成績位置(パーセンタイル)" = percentile
          ) %>% 
-  as.data.frame()
+  as.data.frame()  # datasummaryはtibbleではなくdataframeを引数にとる
   
 # make summary table -----------------------------------------------------------
-summary <- datasummary(All(df_summary) ~ (N + Mean + SD), 
+# datasummaryの書き方はdatasummaryのドキュメントを参照
+# https://modelsummary.com/articles/datasummary.html#datasummary
+summary <- datasummary(All(df_summary) ~ (N + Mean + SD),
                        data = df_summary,
-                       na.rm = TRUE,
-                       fmt = 3,
+                       na.rm = TRUE,  # これがないと欠損のある列のmeanやsdがNAになってしまう
+                       fmt = 3,  # 少数第3位まで表示
                        output = paste0(dir_figure, "/summary.png"))
