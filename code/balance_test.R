@@ -1,13 +1,12 @@
-df <- readRDS(paste0(dir_cleaned_data, "/df.rds"))
-df_school <- readRDS(paste0(dir_cleaned_data, "/df_school.rds"))
+df <- readRDS(paste0(dir_cleaned_data, "/df_clean.rds"))
 
 # aggregate data ---------------------------------------------------------------
 df_aggregated <- df %>% 
-  group_by(sch_id) %>% 
+  group_by(school_id) %>% 
   summarise(girls_ratio = mean(is_girl, na.rm = TRUE),
-          age_mean = mean(age, na.rm = TRUE)) %>% 
-  left_join(df_school, by = "sch_id") %>% 
-  mutate(is_bungoma = if_else(district == "BUNGOMA", 1, 0))
+            age_mean = mean(age, na.rm = TRUE),
+            in_bungoma = unique(in_bungoma),
+            tracking = unique(tracking))
 
 # t-test -----------------------------------------------------------------------
 my_t_test <- function(variable){
@@ -26,21 +25,23 @@ my_t_test <- function(variable){
   
   # 結果のtibbleを作成、~の後は列名
   result_table <- tribble(
-    ~"変数名", ~"介入群",   ~"対照群",   ~"差(介入群 - 対照群)", ~"標準誤差", ~"P値",
+    ~"変数名", ~"対照群",   ~"介入群",   ~"差(対照群 - 介入群)", ~"標準誤差", ~"P値",
     variable,  mean_group1, mean_group2, difference,             se,          p.value
   )
   
   return(result_table)
 }
 
-t_test <- c("girls_ratio", "age_mean", "is_bungoma") %>% 
+t_test <- c("girls_ratio", "age_mean", "in_bungoma") %>% 
   map_dfr(my_t_test) %>%  # ベクトルやリストの各要素のmy_t_test()を適用し、結果のデータフレームを縦に結合
   mutate(変数名 = c("児童の女子比率",
                     "児童の平均年齢",
                     "学校の所在地(BUNGOMAにあれば1)"))
 
-# format result ----------------------------------------------------------------
-t_test_table <- t_test %>% 
-  kable(digits = 3) %>% 
-  kable_styling(fixed_thead = T) %>%  # modelsummaryと見た目を揃えている
-  save_kable(paste0(dir_figure, "/t_test.png"))
+# output result ----------------------------------------------------------------
+
+t_test %>% 
+  flextable::as_flextable() %>% 
+  flextable::colformat_double(digits = 3) %>% 
+  flextable::save_as_pptx(path = paste0(dir_output, "balance_test.pptx"))
+  
