@@ -1,4 +1,4 @@
-df <- readRDS(paste0(dir_cleaned_data, "/df.rds"))
+df <- readRDS(paste0(dir_cleaned_data, "/df_clean.rds"))
 
 table_summary_stats <-
   df %>% 
