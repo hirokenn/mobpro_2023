@@ -42,9 +42,10 @@ deficiency_pattern <- c("unknown", NA, "999", "*", "###")
 
 # 同じ処理を複数列に適用したい場合はmutate(across())を用いる
 # %in%はベクトルの要素の一致するものが含まれるかどうかを判別するする論理演算子
-# .は%>%の時は前の関数の返り値、mutateでは指定した列を表す。つまりこの時はc(gender, percentile, quartile)が.
+# .は%>%の時は前の関数の返り値、mutateでは指定した列を表す。
+# チルダ式内では与えた引数を.xで表す。つまりこの時はc(gender, percentile, quartile)が.x
 df_cleaned <- df_concatenated %>% 
-  mutate(across(c(gender, percentile, quartile), ~if_else(. %in% deficiency_pattern, NA, .))) %>% 
+  mutate(across(c(gender, percentile, quartile), ~if_else(.x %in% deficiency_pattern, NA, .x))) %>% 
   mutate(percentile = as.numeric(percentile))
 
 # make dummy variables
