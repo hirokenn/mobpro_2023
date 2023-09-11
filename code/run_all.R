@@ -3,8 +3,8 @@ pacman::p_load(tidyverse, modelsummary, kableExtra, estimatr)
 
 dir_cleaned_data <- "./data/clean"
 dir_distributed_data <- "./data/distributed/"
-dir_source <- "./src/answer"
-dir_figure <- "./fig"
+dir_source <- "./code/"
+dir_figure <- "./output/"
 
 # run scripts ------------------------------------------------------------------
 # data cleaning
