@@ -29,7 +29,7 @@ results <- list(
 
 # make regression table --------------------------------------------------------
 # modelsummaryの表に何を入れるかなど指定できる
-coef_map <- c("tracking" = "処置効果", 
+coef_map <- c("tracking" = "能力別学級", 
               "tracking:bottom_half" = "事前の成績位置(下位50%) × 能力別学級")
 
 gof_map <- tribble(
