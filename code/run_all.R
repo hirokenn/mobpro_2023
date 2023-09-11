@@ -1,17 +1,17 @@
 # set up -----------------------------------------------------------------------
-pacman::p_load(tidyverse, modelsummary, kableExtra, estimatr)
+pacman::p_load(tidyverse, modelsummary, kableExtra, estimatr, gtsummary)
 
 dir_cleaned_data <- "./data/clean"
 dir_distributed_data <- "./data/distributed/"
 dir_source <- "./code/"
-dir_figure <- "./output/"
+dir_output <- "./output/"
 
 # run scripts ------------------------------------------------------------------
 # data cleaning
 source(paste0(dir_source, "/cleaning.R"))
 
 # summarize data
-source(paste0(dir_source, "/summarization.R"))
+source(paste0(dir_source, "/summary_stats.R"))
 
 # balance test
 source(paste0(dir_source, "/balance_test.R"))
