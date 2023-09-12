@@ -26,7 +26,7 @@ my_t_test <- function(variable){
   
   # 結果のtibbleを作成、~の後は列名
   result_table <- tribble(
-    ~"変数名", ~"介入群",   ~"対照群",   ~"差(介入群 - 対照群)", ~"標準誤差", ~"P値",
+    ~"変数名", ~"対照群",   ~"介入群",   ~"差(対照群 - 介入群)", ~"標準誤差", ~"P値",
     variable,  mean_group1, mean_group2, difference,             se,          p.value
   )
   

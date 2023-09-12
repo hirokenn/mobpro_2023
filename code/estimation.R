@@ -22,20 +22,20 @@ with_cross_term_model <- paste(with_covariates_model,
 # 推計結果をlistにしておくとmodelsummaryに入れやすい
 # lm_robustはas.formula()が無いと文字列を式として判断してくれない
 results <- list(
-  "共変量なし" = lm_robust(formula = as.formula(base_model), data = df, clusters = sch_id),
-  "共変量あり" = lm_robust(formula = as.formula(with_covariates_model), data = df, clusters = sch_id),
-  "交差項あり" = lm_robust(formula = as.formula(with_cross_term_model), data = df, clusters = sch_id)
+  "Model (a)" = lm_robust(formula = as.formula(base_model), data = df, clusters = sch_id),
+  "Model (b)" = lm_robust(formula = as.formula(with_covariates_model), data = df, clusters = sch_id),
+  "Model (c)" = lm_robust(formula = as.formula(with_cross_term_model), data = df, clusters = sch_id)
 )
 
 # make regression table --------------------------------------------------------
 # modelsummaryの表に何を入れるかなど指定できる
-coef_map <- c("tracking" = "処置効果", 
+coef_map <- c("tracking" = "能力別学級", 
               "tracking:bottom_half" = "事前の成績位置(下位50%) × 能力別学級")
 
 gof_map <- tribble(
   ~raw,        ~clean,   ~fmt,
   "nobs",      "観測数", 0,
-  "r.squared", "決定数", 3
+  "r.squared", "決定係数", 3
 )
 
 control_status <- tribble(
