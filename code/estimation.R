@@ -10,7 +10,7 @@ df <- readRDS(paste0(dir_cleaned_data, "/df.rds"))
 covariates <- 
   df %>% 
   select(age, is_girl, etp_teacher, 
-         ends_with(c("_half", "_quarter")) & !starts_with("top_"), 
+         starts_with(c("half_", "quarter_")) & !ends_with("top_"), 
          percentile) %>% 
   names() %>% 
   paste(collapse = " + ")
@@ -21,7 +21,7 @@ list_models[["Model (a)"]] <- "std_score ~ tracking"
 
 list_models[["Model (b)"]] <- paste0(list_models[["Model (a)"]], " + ", covariates)
 
-list_models[["Model (c)"]] <- paste0(list_models[["Model (b)"]], " + tracking:bottom_half")
+list_models[["Model (c)"]] <- paste0(list_models[["Model (b)"]], " + tracking:half_bottom")
 
 list_models <- list_models %>% map(as.formula)
 
@@ -31,12 +31,12 @@ list_results <-
   map(list_models, 
       \(model){lm_robust(formula = model,
                          data = df,
-                         clusters = sch_id)})
+                         clusters = school_id)})
 
 # make regression table --------------------------------------------------------
 # modelsummaryの表に何を入れるかなど指定できる
 coef_map <- c("tracking" = "能力別学級", 
-              "tracking:bottom_half" = "事前の成績位置(下位50%) × 能力別学級")
+              "tracking:half_bottom" = "事前の成績位置(下位50%) × 能力別学級")
 
 gof_map <- tribble(
   ~raw,        ~clean,   ~fmt,
