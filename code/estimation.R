@@ -1,4 +1,4 @@
-df <- readRDS(paste0(dir_cleaned_data, "/df.rds")) 
+# df <- readRDS(paste0(dir_cleaned_data, "/df_main.rds")) 
 
 ##### ここでの戦略 #####
 # 3つのモデルを推定するが、行う処理は式が異なる以外全て同じである
