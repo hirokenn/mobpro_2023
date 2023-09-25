@@ -1,46 +1,52 @@
 df <- readRDS(paste0(dir_cleaned_data, "/df.rds")) 
 
+##### ここでの戦略 #####
+# 3つのモデルを推定するが、行う処理は式が異なる以外全て同じである
+# 結果表示のため推計結果は3つのモデルをまとめたリストになっていると都合が良い
+# -> 初めから3つの式をリストとして扱い、mapで処理する
+
 # define models ----------------------------------------------------------------
-base_model <- "std_score ~ tracking"
 
-with_covariates_model <- paste(base_model,
-                               "age",
-                               "is_girl",
-                               "etp_teacher",
-                               "bottom_half",
-                               "bottom_quarter",
-                               "second_quarter",
-                               "third_quarter",
-                               "percentile",
-                               sep = " + ")
+covariates <- 
+  df %>% 
+  select(age, is_girl, etp_teacher, 
+         ends_with(c("_half", "_quarter")) & !starts_with("top_"), 
+         percentile) %>% 
+  names() %>% 
+  paste(collapse = " + ")
 
-with_cross_term_model <- paste(with_covariates_model,
-                               "tracking:bottom_half",
-                               sep = " + ")
+list_models <- list()
+
+list_models[["Model (a)"]] <- "std_score ~ tracking"
+
+list_models[["Model (b)"]] <- paste0(list_models[["Model (a)"]], " + ", covariates)
+
+list_models[["Model (c)"]] <- paste0(list_models[["Model (b)"]], " + tracking:bottom_half")
+
+list_models <- list_models %>% map(as.formula)
 
 # regression analysis ----------------------------------------------------------
-# 推計結果をlistにしておくとmodelsummaryに入れやすい
-# lm_robustはas.formula()が無いと文字列を式として判断してくれない
-results <- list(
-  "Model (a)" = lm_robust(formula = as.formula(base_model), data = df, clusters = sch_id),
-  "Model (b)" = lm_robust(formula = as.formula(with_covariates_model), data = df, clusters = sch_id),
-  "Model (c)" = lm_robust(formula = as.formula(with_cross_term_model), data = df, clusters = sch_id)
-)
+
+list_results <-
+  map(list_models, 
+      \(model){lm_robust(formula = model,
+                         data = df,
+                         clusters = sch_id)})
 
 # make regression table --------------------------------------------------------
 # modelsummaryの表に何を入れるかなど指定できる
-coef_map <- c("tracking" = "処置効果", 
+coef_map <- c("tracking" = "能力別学級", 
               "tracking:bottom_half" = "事前の成績位置(下位50%) × 能力別学級")
 
 gof_map <- tribble(
   ~raw,        ~clean,   ~fmt,
   "nobs",      "観測数", 0,
-  "r.squared", "決定係数", 3
+  "adj.r.squared", "調整済み決定係数", 3
 )
 
 control_status <- tribble(
-  ~term,             ~共変量なし, ~共変量あり, ~交差項あり,
-  "コントロール変数", "なし",          "あり",      "あり"
+  ~term,             ~"Model (a)", ~"Model (b)", ~"Model (c)",
+  "コントロール変数", "",          "X",      "X"
 )
 
 # attr()でオブジェクトに属性を付与できる
@@ -49,10 +55,20 @@ attr(control_status, "position") <- 5
 
 # modelsummaryの書き方の詳細はドキュメントを参照
 # https://modelsummary.com/articles/modelsummary.html
-result_summary <- modelsummary(results,
-                               stars = TRUE,  # 有意水準の星がつく
-                               coef_map = coef_map,  # 表示する係数を決める
-                               gof_map = gof_map,  # 表示するモデルの評価指標を指定
-                               add_rows = control_status,  # 指定の列を挿入
-                               output = paste0(dir_figure, "/regression_result.png"))
 
+# in pptx
+modelsummary(list_results,
+             stars = TRUE,  
+             coef_map = coef_map,  
+             gof_map = gof_map,  
+             add_rows = control_status,
+             output = "flextable") %>%   
+  flextable::save_as_pptx(path = paste0(dir_output, "results.pptx"))
+
+# in docx
+modelsummary(list_results,
+             stars = TRUE,  
+             coef_map = coef_map,  
+             gof_map = gof_map,  
+             add_rows = control_status,
+             output = paste0(dir_output, "results.docx")) 
