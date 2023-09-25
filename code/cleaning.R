@@ -52,7 +52,7 @@ df_outcomes <- df_outcomes %>%
 
 # garbles
 df_student_characteristics <- df_student_characteristics %>% 
-  mutate(student_id = str_remove(student_id, "番"))  # mutateで複数列を作成する場合はカンマで繋げられる
+  mutate(student_id = str_remove(student_id, "番")) 
 
 # missing values
 missing_pattern <- c("unknown", NA, "999", "*", "###")
@@ -63,33 +63,9 @@ df_student_characteristics <-
                 ~if_else(.x %in% missing_pattern, NA_character_, .x))) %>% 
   mutate(percentile = as.numeric(percentile))
 
+# save cleaned data -------------------------------------------------------
 
-# join data ---------------------------------------------------------------
+saveRDS(df_student_characteristics, paste0(dir_cleaned_data, "/df_student_characteristics.rds"))
+saveRDS(df_treatment_status, paste0(dir_cleaned_data, "/df_treatment_status.rds"))
+saveRDS(df_outcomes, paste0(dir_cleaned_data, "/df_outcomes.rds"))
 
-df_concatenated <- df_student_characteristics %>% 
-  left_join(df_treatment_status, by = "school_id") %>%  
-  left_join(df_outcomes, by = "student_id")
-
-
-
-# make variables ----------------------------------------------------------
-
-# make dummy variables
-df <- df_concatenated %>% 
-  mutate(is_girl = if_else(gender == "女子", 1, 0),
-         in_bungoma = if_else(district == "BUNGOMA", 1, 0)) %>% 
-  fastDummies::dummy_cols(select_columns = c("half", "quarter"), ignore_na = T) %>% 
-  rename_with(.cols = paste("half", c("上位50%", "下位50%"), sep = "_"), 
-              .fn = ~{paste("half", c("top", "bottom"), sep = "_")}) %>% 
-  rename_with(.cols = paste("quarter", c("上位25%", "上位25-50%", "下位25-50%", "下位25%"), sep = "_"), 
-              .fn = ~{paste("quarter", c("top", "second", "third", "bottom"), sep = "_")}) %>% 
-  select(-gender, -half, -quarter)
-
-
-# scale score
-df <- df %>% 
-  mutate(std_score = drop(scale(score)))  
-
-
-# output cleaned data ----------------------------------------------------------
-saveRDS(df, paste0(dir_cleaned_data, "/df_clean.rds"))

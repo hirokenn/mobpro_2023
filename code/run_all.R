@@ -9,6 +9,7 @@ dir_output <- "./output/"
 # run scripts ------------------------------------------------------------------
 # data cleaning
 source(paste0(dir_source, "/cleaning.R"))
+source(paste0(dir_source, "/create_variables.R"))
 
 # summarize data
 source(paste0(dir_source, "/summary_stats.R"))
