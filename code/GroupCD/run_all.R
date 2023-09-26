@@ -1,0 +1,8 @@
+source("code/setup.R")
+source("code/read_data.R")
+source("code/change_variable.R")
+source("code/NAcoding.R")
+source("code/data_join.R")
+source("code/data_cleaned.R")
+source("code/describe.R")
+source("code/estimate.R")
